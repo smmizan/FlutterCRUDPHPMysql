@@ -7,6 +7,11 @@ class MyServices{
 
   static const URL_INSERT = "https://smmizan.com/appWorld/flutter/crud/insertData.php";
   static const URL_GET = "https://smmizan.com/appWorld/flutter/crud/getData.php";
+  static const URL_UPDATE = "https://smmizan.com/appWorld/flutter/crud/updateData.php";
+
+
+
+   // insert method
 
   Future<String> addData(Model model) async{
     final response = await Http.post(URL_INSERT,body: model.toJsonAdd());
@@ -20,6 +25,9 @@ class MyServices{
 
   }
 
+
+
+  //read method
 
   List<Model> dataFromJson(String jsonString){
     final data = json.decode(jsonString);
@@ -35,6 +43,22 @@ class MyServices{
       return list;
     }else{
       return List<Model>();
+    }
+
+  }
+
+
+
+  //update method
+
+  Future<String> updateData(Model model) async{
+    final response = await Http.post(URL_UPDATE,body: model.toJsonUpdate());
+    if(response.statusCode == 200){
+      print('Response is : ${response.body}');
+      return response.body;
+
+    }else{
+      print('Failed to Insert Data.');
     }
 
   }

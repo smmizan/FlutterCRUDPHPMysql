@@ -51,7 +51,17 @@ class _HomePagesState extends State<HomePages> {
         itemBuilder: (context,index){
           Model model = list[index];
           return ListTile(
+            onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddInsertData(model: model,index: index,))).then((value) => getAllData());
+            },
+            leading: CircleAvatar(child: Text(model.name[0]),),
             title: Text(model.name),
+            subtitle: Text(model.mail),
+            trailing: IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: (){
+
+                }),
           );
 
         },

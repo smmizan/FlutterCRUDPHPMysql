@@ -4,6 +4,12 @@ import 'package:flutter_crud_php_mysql/services/my_services.dart';
 import 'package:toast/toast.dart';
 
 class AddInsertData extends StatefulWidget {
+  final Model model;
+  final int index;
+
+  AddInsertData({this.model,this.index});
+
+
   @override
   _AddInsertDataState createState() => _AddInsertDataState();
 }
@@ -14,6 +20,8 @@ class _AddInsertDataState extends State<AddInsertData> {
   TextEditingController mail = TextEditingController();
   TextEditingController address = TextEditingController();
 
+  bool updateData = false;
+
 
   _saveData(Model model) async{
     await MyServices().addData(model).then((value){
@@ -23,11 +31,37 @@ class _AddInsertDataState extends State<AddInsertData> {
   }
 
 
+
+  _updateData(Model model) async{
+    await MyServices().updateData(model).then((value){
+      Toast.show("Updated Data", context,gravity:Toast.CENTER,duration: 2);
+      Navigator.pop(context);
+    });
+  }
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    if(widget.index != null){
+      updateData = true;
+      name.text = widget.model.name;
+      mail.text = widget.model.mail;
+      address.text = widget.model.address;
+
+    }
+
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Data'),
+        title: Text(updateData ? 'Update Data' : 'Add Data'),
       ),
       body: Container(
         child: Padding(
@@ -50,13 +84,19 @@ class _AddInsertDataState extends State<AddInsertData> {
               ),
               SizedBox(height: 8,),
               RaisedButton(
-                child: Text('Insert Data'),
+                child: Text(updateData ? 'Update Data' : 'Insert Data'),
                 onPressed: (){
-                  if(name.text.isEmpty && mail.text.isEmpty && address.text.isEmpty){
-                    Toast.show("Please fillup this filed", context,gravity: Toast.CENTER,duration: 2);
+                  if(updateData){
+                    Model model = Model(id:widget.model.id,name: name.text,mail: mail.text,address: address.text);
+                    _updateData(model);
+
                   }else{
-                    Model model = Model(name: name.text,mail: mail.text,address: address.text);
-                    _saveData(model);
+                    if(name.text.isEmpty && mail.text.isEmpty && address.text.isEmpty){
+                      Toast.show("Please fillup this filed", context,gravity: Toast.CENTER,duration: 2);
+                    }else{
+                      Model model = Model(name: name.text,mail: mail.text,address: address.text);
+                      _saveData(model);
+                    }
                   }
 
                 },

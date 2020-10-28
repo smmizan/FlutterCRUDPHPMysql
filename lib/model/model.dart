@@ -31,8 +31,18 @@ class Model{
       "mail":mail,
       "address":address,
     };
-
 }
+
+
+
+  Map<String,dynamic> toJsonUpdate() {
+    return {
+      "id": id,
+      "name": name,
+      "mail": mail,
+      "address": address,
+    };
+  }
 
 
 
