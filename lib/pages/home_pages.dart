@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_crud_php_mysql/model/model.dart';
 import 'package:flutter_crud_php_mysql/pages/add_item.dart';
 import 'package:flutter_crud_php_mysql/services/my_services.dart';
+import 'package:toast/toast.dart';
 
 class HomePages extends StatefulWidget {
   @override
@@ -24,6 +25,19 @@ class _HomePagesState extends State<HomePages> {
 
     print('Data : ${list.length}');
   }
+
+
+
+  getDeletedDataRefresh(Model model) async{
+    await MyServices().deleteData(model);
+    setState(() {
+      isLoading = false;
+      getAllData();
+    });
+
+   Toast.show("Delete Items! ", context,gravity: Toast.CENTER,duration: 3);
+  }
+
 
 
   @override
@@ -60,6 +74,7 @@ class _HomePagesState extends State<HomePages> {
             trailing: IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: (){
+                  getDeletedDataRefresh(model);
 
                 }),
           );
